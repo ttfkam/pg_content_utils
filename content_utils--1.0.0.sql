@@ -2,11 +2,27 @@
 -- content utils PostgreSQL extension
 -- Miles Elam <miles@geekspeak.org>
 --
--- No dependencies
+-- Depends on file_fdw
+--            /usr/share/dict/words (e.g., from apt-get install wamerican-small)
 -- ---------------------------------------------------------------------------
 
 -- complain if script is sourced in psql, rather than via CREATE EXTENSION
 \echo Use "CREATE EXTENSION content_utils" to load this file. \quit
+
+CREATE SERVER dictionary_word_files
+  FOREIGN DATA WRAPPER file_fdw;
+
+CREATE FOREIGN TABLE words_fdt(
+    word character varying NULL COLLATE pg_catalog."default")
+  SERVER dictionary_word_files
+  OPTIONS (filename '/usr/share/dict/words', format 'csv', header 'FALSE');
+
+CREATE MATERIALIZED VIEW words AS
+  SELECT DISTINCT lower(words_fdt.word::text) AS word
+    FROM words_fdt
+  WITH DATA;
+
+CREATE UNIQUE INDEX words_udx ON words USING btree(word);
 
 CREATE FUNCTION count_unusual(input_text text) RETURNS integer
 LANGUAGE sql STABLE STRICT LEAKPROOF AS $$
