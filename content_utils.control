@@ -1,0 +1,7 @@
+# content_utils extension
+# Miles Elam <miles@geekspeak.org>
+# No dependencies
+
+comment = 'utility functions for use with news management and full text search'
+default_version = '1.0.0'
+relocatable = true
