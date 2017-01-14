@@ -1,0 +1,10 @@
+postgresql-content-utils for Debian
+------------------
+
+PostgreSQL extension providing utility functions for use with news management and full
+text search
+
+Use "CREATE EXTENSION content_utils" to load into your database.
+
+ -- Miles Elam <miles@geekspeak.org>  Sat, 14 Jan 2017 12:01:37 -0800
+
